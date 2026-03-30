@@ -1,16 +1,80 @@
-# React + Vite
+# 🎬 Movie-GPT
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Netflix-inspired movie discovery web app built with **React + Vite**, featuring **Firebase Authentication** and a clean login / signup experience.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Current Progress
 
-## React Compiler
+This project currently includes:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- 🔐 **Firebase Authentication**
+  - Sign Up with Email & Password
+  - Sign In with Email & Password
+  - User profile name update after signup
 
-## Expanding the ESLint configuration
+- 🧾 **Form Validation**
+  - Email format validation
+  - Password length validation
+  - Error handling for invalid inputs and Firebase auth errors
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- 🎨 **Responsive Login UI**
+  - Netflix-inspired dark theme
+  - Background hero image
+  - Opaque login / signup form
+  - Toggle between Sign In and Sign Up
+
+- ⚡ **Built with Vite**
+  - Fast development environment
+  - Optimized build setup
+
+---
+
+## 🛠️ Tech Stack
+
+- **React.js**
+- **Vite**
+- **Tailwind CSS**
+- **Firebase Authentication**
+- **JavaScript (ES6+)**
+
+---
+
+## 📌 Features Implemented So Far
+
+### Authentication
+- User account creation using Firebase
+- Existing user login using Firebase
+- Firebase `updateProfile()` used to store display name
+
+### Validation
+- Custom email validation using regex
+- Password validation before hitting Firebase
+- Error messages displayed in UI
+
+### UI
+- Reusable Header component
+- Login / Signup toggle flow
+- Full-screen background with dark overlay
+- Centered auth form
+
+---
+
+## 📂 Project Structure
+
+```bash
+src/
+│
+├── components/
+│   ├── Header.jsx
+│   ├── Login.jsx
+│   ├── Browse.jsx
+│   └── Body.jsx
+│
+├── utils/
+│   ├── firebase.js
+│   └── validate.js
+│
+├── App.jsx
+├── main.jsx
+└── index.css
