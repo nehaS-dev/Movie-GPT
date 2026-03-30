@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useState, useRef } from 'react'
 import Header from './Header';
-import { useState , useRef} from 'react';
 import { checkValidateData } from '../utils/validate';
-//import {  createUserWithEmailAndPassword } from "firebase/auth";
-//import { auth } from '../utils/firebase';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile
+} from "firebase/auth";
+import { auth } from '../utils/firebase';
 
 
 const Login = () => {
@@ -13,18 +16,59 @@ const Login = () => {
     const password = useRef(null);
     const name = useRef(null);
 
-    const handleButtonClick = () => {
-        //validation
-        const message = checkValidateData(email.current.value , password.current.value)
-        setErrorMessage(message);
-        
-        if(message) return;
-        //signin signup
-        //sign in sign up logic 
-    }
     const toggleSignInForm = () => {
-        setIsSignInForm(!isSignInForm);
+  setIsSignInForm(!isSignInForm);
+  setErrorMessage(null);
+};
+
+    const handleButtonClick = async (e) => {
+  e.preventDefault();
+
+  // Step 1: Validate input first
+  const message = checkValidateData(
+    email.current.value,
+    password.current.value
+  );
+
+  setErrorMessage(message);
+
+  if (message) return;
+
+  try {
+    if (!isSignInForm) {
+      // =========================
+      // SIGN UP LOGIC
+      // =========================
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      );
+
+      // Add display name after signup
+      await updateProfile(userCredential.user, {
+        displayName: name.current.value,
+      });
+
+      console.log("User Signed Up:", userCredential.user);
+      setErrorMessage(null);
+    } else {
+      // =========================
+      // SIGN IN LOGIC
+      // =========================
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      );
+
+      console.log("User Signed In:", userCredential.user);
+      setErrorMessage(null);
     }
+  } catch (error) {
+    setErrorMessage(error.code + " - " + error.message);
+  }
+};
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       <Header />
@@ -41,7 +85,7 @@ const Login = () => {
 
       {/* Form Container */}
       <div className="absolute inset-0 flex justify-center items-center z-20 px-4">
-        <form onSubmit={(e) => e.preventDefault()} className="w-full max-w-md bg-black/70 text-white p-8 sm:p-10 rounded-lg">
+        <form onSubmit={handleButtonClick} className="w-full max-w-md bg-black/70 text-white p-8 sm:p-10 rounded-lg">
           <h1 className="text-3xl font-bold mb-6">{isSignInForm ? "Sign In" : "Sign Up"}</h1>
 
 
@@ -67,11 +111,14 @@ const Login = () => {
             type="password"
             placeholder="Password"
           />
-          <p className='text-red-500 font-bold text-leg p-2'>{errorMessage}</p>
+          <p className='text-red-500 font-bold text-lg p-2'>{errorMessage}</p>
 
-          <button className="p-4 my-5 bg-red-700 w-full rounded font-bold hover:bg-red-800 transition duration-200" onClick={handleButtonClick}>
-            {isSignInForm ? "Sign In" : "Sign Up"}
-          </button>
+          <button
+  type="submit"
+  className="p-4 my-5 bg-red-700 w-full rounded font-bold hover:bg-red-800 transition duration-200"
+>
+  {isSignInForm ? "Sign In" : "Sign Up"}
+</button>
 
           <p className="mt-4 text-gray-300 text-sm cursor-pointer" onClick={toggleSignInForm}>
             {isSignInForm ? "New to Netflix? Sign Up Now" : "Already registered? Sign In Now"}
